@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西甲赛事资料与信息索引</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f9fbfc;
+            color: #1a2b3c;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* hero */
+        .hero {
+            background: linear-gradient(135deg, #0b2c3f 0%, #134a5e 40%, #1e6b7a 100%);
+            color: #f0f7fa;
+            padding: 70px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid #3bc9a6;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -15%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 201, 166, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .hero .sub {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 620px;
+            margin: 0 auto 24px;
+            padding: 0 10px;
+            font-weight: 300;
+        }
+
+        .hero .meta-note {
+            display: inline-block;
+            background: rgba(59, 201, 166, 0.18);
+            border: 1px solid rgba(59, 201, 166, 0.3);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            color: #d6f0e6;
+        }
+
+        .hero .meta-note a {
+            color: #b0e9d8;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted #3bc9a6;
+        }
+
+        .hero .meta-note a:hover {
+            color: #e1fff2;
+            border-bottom-style: solid;
+        }
+
+        /* 通用卡片网格 */
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #0b2c3f;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: #3bc9a6;
+            margin-top: 6px;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 26px 22px;
+            box-shadow: 0 4px 14px rgba(0, 20, 30, 0.04), 0 1px 4px rgba(0, 0, 0, 0.02);
+            border: 1px solid #e6edf2;
+            transition: box-shadow 0.2s, transform 0.15s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 50, 60, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 550;
+            margin-bottom: 10px;
+            color: #114351;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card h3 .icon {
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        .card p {
+            color: #2f4253;
+            font-size: 0.95rem;
+        }
+
+        .card .tag {
+            display: inline-block;
+            background: #e4f3f1;
+            color: #036b72;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-top: 12px;
+        }
+
+        /* 说明区 */
+        .context-block {
+            background: #edf5f8;
+            border-radius: 28px;
+            padding: 34px 32px;
+            margin: 48px 0;
+            border-left: 6px solid #3bc9a6;
+        }
+
+        .context-block p {
+            font-size: 1rem;
+            max-width: 780px;
+        }
+
+        .context-block a {
+            color: #036b72;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-thickness: 1px;
+            text-decoration-color: #8bcbca;
+        }
+
+        .context-block a:hover {
+            color: #033f4a;
+        }
+
+        /* FAQ 摘要 */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px 30px;
+            margin: 22px 0 10px;
+        }
+
+        .faq-item {
+            padding: 14px 0;
+            border-bottom: 1px solid #dde7ec;
+        }
+
+        .faq-item strong {
+            display: block;
+            font-weight: 550;
+            color: #0b3a47;
+            margin-bottom: 4px;
+            font-size: 1.02rem;
+        }
+
+        .faq-item p {
+            font-size: 0.9rem;
+            color: #35505f;
+        }
+
+        .faq-footnote {
+            font-size: 0.9rem;
+            margin-top: 18px;
+            padding: 12px 0;
+            border-top: 1px solid #cbdae1;
+            color: #3d5a67;
+        }
+
+        .faq-footnote a {
+            color: #036b72;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        /* 底部链接 */
+        .bottom-links {
+            margin: 54px 0 30px;
+            padding: 30px 0 20px;
+            border-top: 1px solid #d4e0e7;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .bottom-links .col {
+            font-size: 0.9rem;
+            color: #3c5b6b;
+        }
+
+        .bottom-links a {
+            color: #036b72;
+            text-decoration: none;
+            border-bottom: 1px dotted #7ebfbf;
+        }
+
+        .bottom-links a:hover {
+            border-bottom-style: solid;
+            color: #033f4a;
+        }
+
+        .bottom-links .brand {
+            font-weight: 500;
+            color: #134a5e;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero {
+                padding: 50px 0 44px;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .context-block {
+                padding: 24px 20px;
+            }
+
+            .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-links {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .card {
+                padding: 20px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <h1>西甲赛事信息索引 · 资料整理</h1>
+            <p class="sub">从赛季档案、转会记录到比赛数据，搭建一套可供查阅的西甲内容框架。适合希望系统性了解联赛动态的用户。</p>
+            <div class="meta-note">
+                持续关注 <a href="https://sports-cctv-laliga.com">西甲直播</a> 相关赛事信息与内容更新
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- 优势区：卡片网格 -->
+        <div style="margin-top: 48px;">
+            <h2 class="section-title">信息模块与索引特点</h2>
+            <div class="grid-cards">
+                <div class="card">
+                    <h3><span class="icon">📋</span>赛季档案</h3>
+                    <p>收录近五个赛季的积分榜、射手榜、助攻榜，以及每轮赛果整理。方便横向对比球队状态与趋势。</p>
+                    <span class="tag">历史数据</span>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🔄</span>转会记录</h3>
+                    <p>各窗口重要转入转出汇总，附带球员位置与预估转会费范围。不保证绝对准确性，仅作参考索引。</p>
+                    <span class="tag">夏/冬窗</span>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🏟️</span>赛程与场地</h3>
+                    <p>未来一个月比赛日程、开球时间（北京时间）以及主场球场基本信息。信息源来自公开数据整理。</p>
+                    <span class="tag">时间表</span>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">📊</span>统计简表</h3>
+                    <p>控球率、传球成功率、犯规、红黄牌等基础统计，按球队与轮次归类。适合快速检索。</p>
+                    <span class="tag">数据摘录</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 说明区：从资料整理角度展开 -->
+        <div class="context-block">
+            <p>
+                这个页面更像一个长期维护的笔记本——把关于西甲的各类公开信息按主题归拢起来。如果你需要查阅某支球队近期的表现、某轮比赛的简要结果，或者只是随便翻翻联赛的历史片段，或许能从这里找到一些头绪。内容的来源是比赛报告、官方统计和媒体综述，我们尽量保持简洁与可读，但无法替代实时广播或视频报道。关于赛事直播与最新战况，你可以随时通过 <a href="https://sports-cctv-laliga.com">西甲直播</a> 获取更直接的动态。这里主要负责把信息摊开、分类、放好。
+            </p>
+        </div>
+
+        <!-- FAQ 摘要 -->
+        <h2 class="section-title" style="margin-top: 20px;">常见问题摘要</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <strong>📅 赛程时间以什么为准？</strong>
+                <p>所有时间均转换为北京时间（UTC+8），但偶尔因转播调整或延迟，建议以官方渠道为准。我们也会定期核对。</p>
+            </div>
+            <div class="faq-item">
+                <strong>📁 数据多久更新一次？</strong>
+                <p>通常在每轮比赛结束后 24 小时内更新积分、射手等核心表格。转会记录则在窗口关闭后集中整理。</p>
+            </div>
+            <div class="faq-item">
+                <strong>🔍 可以查找特定球队的历史赛季吗？</strong>
+                <p>我们覆盖了近五年西甲全部球队的赛季数据，包括升班马。更早的赛季正在逐步补充档案页面。</p>
+            </div>
+            <div class="faq-item">
+                <strong>📡 这里能看到实时比赛吗？</strong>
+                <p>本页主要做信息索引，不提供流媒体或直播信号。实时赛事内容可通过相关平台或 <a href="https://sports-cctv-laliga.com" style="color:#036b72;text-decoration:underline;text-underline-offset:2px;">西甲直播</a> 资源了解。</p>
+            </div>
+        </div>
+        <div class="faq-footnote">
+            ⚡ 更多问题可以邮件反馈，或者直接浏览我们整理的联赛资料库。页面不定期扩充章节。
+        </div>
+
+        <!-- 底部链接 -->
+        <div class="bottom-links">
+            <div class="col">
+                <span class="brand">西甲信息索引</span> · 内容仅供参考
+            </div>
+            <div class="col">
+                <a href="https://sports-cctv-laliga.com">西甲直播</a> 
+                <span style="margin:0 8px;color:#b1c9d4;">/</span> 
+                <a href="#">关于这个索引</a>
+                <span style="margin:0 8px;color:#b1c9d4;">/</span> 
+                <a href="#">反馈</a>
+            </div>
+            <div class="col" style="font-size:0.8rem;color:#6c8899;">
+                资料整理 · 非官方页面
+            </div>
+        </div>
+    </div>
+</body>
+</html>
